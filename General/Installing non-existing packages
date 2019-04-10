@@ -1,0 +1,26 @@
+install.nonexisting.packages <- function(pkg){
+        # this function gets a string vector of package names (pkg) as input and installs 
+        # the packages that has not been already installed on your system
+        
+        # find which packages in your input have not been already installed
+        new.pkg <- pkg[!(pkg %in% installed.packages()[, "Package"])]
+        
+        # install them
+        if (length(new.pkg)) 
+                install.packages(new.pkg, dependencies = TRUE)
+                
+        # load them all
+        sapply(pkg, require, character.only = TRUE)
+}
+
+
+# Example
+
+packages <- 
+        c(
+                "shinycssloaders", "markdown", "shiny", "readxl", 
+                "markdown", "readr", "googleVis", "dplyr", 
+                "ggplot2", "bizdays", "timeDate", "openxlsx", 
+                "stringr", "magick"
+        )
+install.nonexisting.packages(packages)
