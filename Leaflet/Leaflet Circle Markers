@@ -1,0 +1,49 @@
+library(shiny)
+library(leaflet)
+
+ui <- fluidPage(
+        leafletOutput("map", height = 400)
+        
+)
+
+server <- function(input, output) {
+        
+        output$map <- renderLeaflet({
+                
+                pal <- colorFactor(c("navy", "red"), domain = c("ship", "pirate"))
+                data(quakes)
+                
+                quakes[1:5,] %>% 
+                leaflet() %>% 
+                        addTiles() %>%
+                        # Add circle markers to the map
+                        addCircleMarkers(# map,                         # a map widget object created from leaflet()
+                                         # lng = NULL,                  # a numeric vector of longitudes, or a one-sided formula of the form ~x where x is a variable in data; by default (if not explicitly provided), it will be automatically inferred from data by looking for a column named lng, long, or longitude (case-insensitively)
+                                         # lat = NULL,                  # a vector of latitudes or a formula (similar to the lng argument; the names lat and latitude are used when guessing the latitude column from data)
+                                         radius = 10,                   # a numeric vector of radii for the circles; it can also be a one-sided formula, in which case the radius values are derived from the data (units in meters for circles, and pixels for circle markers)
+                                         layerId = NULL,                # the layer id
+                                         group = NULL,                  # the name of the group the newly created layers should belong to (for clearGroup and addLayersControl purposes). Human-friendly group names are permitted–they need not be short, identifier-style names. Any number of layers and even different types of layers (e.g. markers and polygons) can share the same group name.
+                                         stroke = TRUE,                 # whether to draw stroke along the path (e.g. the borders of polygons or circles)
+                                         color = "#03F",                # stroke color
+                                         weight = 3,                    # stroke width in pixels
+                                         opacity = 0.5,                 # stroke opacity (or layer opacity for tile layers)
+                                         fill = TRUE,                   # whether to fill the path with color (e.g. filling on polygons or circles)
+                                         fillColor = "red",             # fill color
+                                         fillOpacity = 0.5,             # fill opacity
+                                         dashArray = NULL,              # a string that defines the stroke dash pattern
+                                         popup = NULL,                  # a character vector of the HTML content for the popups (you are recommended to escape the text using htmlEscape() for security reasons)
+                                         popupOptions = NULL,           # A Vector of popupOptions to provide popups
+                                         label = NULL,                  # a character vector of the HTML content for the labels
+                                         labelOptions = NULL,           # A Vector of labelOptions to provide label options for each label. Default NULL
+                                         options = pathOptions(),       # a list of extra options for tile layers, popups, paths (circles, rectangles, polygons, ...), or other map elements
+                                         clusterOptions = NULL,         # if not NULL, markers will be clustered using Leaflet.markercluster; you can use markerClusterOptions() to specify marker cluster options
+                                         clusterId = NULL               # the id for the marker cluster layer
+                                         # data = getMapData(map)       # the data object from which the argument values are derived; by default, it is the data object provided to leaflet() initially, but can be overridden
+                        )   
+        })
+        
+   
+}
+
+
+shinyApp(ui = ui, server = server)
